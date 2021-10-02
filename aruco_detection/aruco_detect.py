@@ -15,15 +15,18 @@ class aruco_detect:
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         
-        # Counts the number of each ar tag
-        unique, counts = np.unique(ar_ids, return_counts=True)
-        self.ar_counts = dict(zip(unique, counts))
+        if len(ar_ids) > 0:
+            # Counts the number of each ar tag
+            unique, counts = np.unique(ar_ids, return_counts=True)
+            self.ar_counts = dict(zip(unique, counts))
 
-        # Total number of tags/objects
-        self.total = len(ar_ids)
-        
-        # Draw Outline around AR tags
-        ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
-        
-        return(ar_frame)
+            # Total number of tags/objects
+            self.total = len(ar_ids)
+            
+            # Draw Outline around AR tags
+            ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
+            
+            return(ar_frame)
+        else:
+            return(frame)
             
