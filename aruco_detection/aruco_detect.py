@@ -39,6 +39,7 @@ class aruco_detect:
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
             return(ar_frame)
 
+
     def tag_distance(self, corner): 
         Dist = []
 
@@ -67,6 +68,12 @@ class aruco_detect:
             ed = ((Dist[0][0] - Dist[1][0])**2 +((Dist[0][1] - Dist[1][1])**2))**(0.5)
             #cv2.putText(image, str(int(measure*(ed))) + "cm", (int(300), int(300)), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
             print("Euclidian distance = ", ed)
+
+
+    def count_at_gate(self, frame):
+        
+
+
 
 
     def count_tags(self, ar_ids):
