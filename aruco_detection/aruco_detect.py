@@ -84,6 +84,7 @@ class aruco_detect:
         gate_found = False
         if np.all(ar_ids == None):
             gate_found = False
+            return(False)
         else:
             for ar in ar_ids:
                 if ar in self.gate_no:
@@ -100,14 +101,17 @@ class aruco_detect:
             # Find center of of tag and its location on screen
             tlc = ar_corn[i][0][0]     # top left corner
             trc = ar_corn[i][0][1]     # top right corner
-            
+            print('width of frame: ',w)
+            print('tlc ',tlc, 'trc: ',trc)
             # Location of the tag's center on screen
-            tag_center_loc = 0.5*(trc[1] - tlc[1]) + tlc[1]
-            
+            tag_center_loc = 0.5*(trc[0] - tlc[0]) + tlc[0]
+            print('center location: ', tag_center_loc)
             if 0.5*w - 50 <= tag_center_loc <= 0.5*w + 50 :
                 return(True)
             else:
                 return(False)
+        else:
+            return(False)
                 
 
     def count_tags(self, ar_ids, ar_corners):
