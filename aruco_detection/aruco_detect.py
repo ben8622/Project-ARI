@@ -19,7 +19,7 @@ class aruco_detect:
         if np.all(ar_ids != None):
             # Counts the number of each ar tag
             unique, counts = np.unique(ar_ids, return_counts=True)
-            self.ar_counts = dict(zip(unique.astype(str), counts))
+            self.ar_counts = dict(zip(unique.astype(str), counts.astype(str)))
 
             # Total number of tags/objects
             self.total = len(ar_ids)

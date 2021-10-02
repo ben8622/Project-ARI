@@ -18,7 +18,7 @@
                             <p>Mask:</p>
                         </div>
                         <div class="col-md-4">
-                            <p class="count">0</p>
+                            <p id="maskCount" class="count">0</p>
                         </div>
                     </div>
                     <div class="row">
@@ -26,7 +26,7 @@
                         <p>Ventilator:</p>
                     </div>
                     <div class="col-md-4">
-                        <p class="count">0</p>
+                        <p id="ventilatorCount" class="count">0</p>
                     </div>
                     </div>
                     <div class="row">
@@ -34,7 +34,7 @@
                         <p>Zamboni:</p>
                     </div>
                     <div class="col-md-4">
-                        <p class="count">0</p>
+                        <p id="zamboniCount" class="count">0</p>
                     </div>
                     </div>
                 </div>
@@ -45,13 +45,13 @@
                             <p>Est. Weight:</p>
                         </div>
                         <div class="col-md-4">
-                            <p class="count">0</p>
+                            <p id="estWeight" class="count">0</p>
                         </div>
                         <div class="col-md-8">
                             <p>Est. Volume:</p>
                         </div>
                         <div class="col-md-4">
-                            <p class="count">0</p>
+                            <p id="estVol" class="count">0</p>
                         </div>
                     </div>  
                 </div>
@@ -86,25 +86,44 @@
             return false;
         });
 
-        $('#test').on('click', function(e) {
-            e.preventDefault()
-            $.ajax({
-                type : 'GET',
-                url : "{{url_for('test')}}",
-                success: function(response) {
-                    console.log(response)
-                }
-            });
-            return false;
-        });
-
         $('#change-cameras').on('click', function(e) {
             e.preventDefault()
             var camFeed = !$("#cam-feed").prop("hidden")
             $("#cam-feed").prop("hidden", camFeed)
             var zamboniFeed = !$("#zamboni-feed").prop("hidden")
             $("#zamboni-feed").prop("hidden", zamboniFeed)
+            if($('#zamboniCount').text() == "0"){
+                $('#zamboniCount').text("1")
+            } else {
+                $('#zamboniCount').text("0")
+            }
         });
+
+        setInterval(() => {
+            $.ajax({
+                type : 'GET',
+                url : "{{url_for('test')}}",
+                success: function(response) {
+                    let maskCount = response['0']
+                    let ventilatorCount = response['1']
+                    if(typeof maskCount == "undefined"){
+                        maskCount = 0
+                    }
+                    if(typeof ventilatorCount == "undefined"){
+                        ventilatorCount = 0
+                    }
+
+                    $('#maskCount').text(maskCount)
+                    $('#ventilatorCount').text(ventilatorCount)
+
+                    let estWeight = 10.5 * maskCount + 43.67 * ventilatorCount
+                    let estVol = 5 * maskCount + 20 * ventilatorCount
+
+                    $("#estWeight").text(estWeight + " lbs");
+                    $("#estVol").text(estVol + " sqft");
+                }
+            }); 
+        }, 1000);
     });
 </script>
 
