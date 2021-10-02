@@ -7,7 +7,7 @@ ar = aruco_detect.aruco_detect()
 
 frame1 = cv.imread("no_ar_present.png")
 frame2 = cv.imread("boxesWithArucoTags.png")
-ar_frame = ar.get_tags(frame2)
+ar_frame = ar.draw_tags_count(frame2)
 
 while(True):
     cv.imshow('ar test', ar_frame)

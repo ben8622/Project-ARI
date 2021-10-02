@@ -13,7 +13,7 @@ def gen_frames():
         if not success:
             break
         else:
-            frame = ar.get_tags(frame)
+            frame = ar.draw_tags_count(frame)
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
