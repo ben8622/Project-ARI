@@ -35,8 +35,7 @@ def background_process_test():
 @app.route('/test', methods=['GET','POST'])
 def test():
     print(ar.ar_counts)
-    return {
-    }
+    return ar.ar_counts
 
 if __name__ == "__main__":
     app.run(debug=True)
