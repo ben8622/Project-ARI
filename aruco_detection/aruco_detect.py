@@ -33,16 +33,13 @@ class aruco_detect:
         if np.all(ar_ids == None):
             return(frame)
         else:
-            self.count_tags(ar_ids)
+            self.count_tags(ar_ids, ar_corn)
 
             # Draw Outline around AR tags
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
             return(ar_frame)
 
-
-    def tag_distance(self, corner): 
-        Dist = []
-
+    def tag_distance(self, corner):
         corners_abcd = corner.reshape((4, 2))
         (topLeft, topRight, bottomRight, bottomLeft) = corners_abcd
         topRightPoint = (int(topRight[0]), int(topRight[1]))
@@ -53,21 +50,7 @@ class aruco_detect:
         cX = int((topLeft[0] + bottomRight[0])//2)
         cY = int((topLeft[1] + bottomRight[1])//2)
 
-        measure = abs(3.5/(topLeft[0]-cX))
-        #cv2.circle(image, (cX, cY), 4, (255, 0, 0), -1)
-        #cv2.putText(image, str(int(markerId)), (int(topLeft[0]-10), int(topLeft[1]-10)), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
-        Dist.append((cX, cY))
-        # print(arucoDict)
-        if len(Dist) == 0:
-            if Line_Pts is not None:
-                Dist = Line_Pts
-        if len(Dist) == 2:
-            Line_Pts = Dist
-        if len(Dist) == 2:
-            #cv2.line(image, Dist[0], Dist[1], (255, 0, 255), 2)
-            ed = ((Dist[0][0] - Dist[1][0])**2 +((Dist[0][1] - Dist[1][1])**2))**(0.5)
-            #cv2.putText(image, str(int(measure*(ed))) + "cm", (int(300), int(300)), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
-            print("Euclidian distance = ", ed)
+        return 0
 
 
     def count_at_gate(self, frame):
@@ -75,9 +58,9 @@ class aruco_detect:
 
 
 
-
-    def count_tags(self, ar_ids):
+    def count_tags(self, ar_ids, ar_corners):
         # Tally total occurences of each tag
-        for ar_id in ar_ids:
+        for (ar_id, corner) in zip(ar_ids, ar_corners):
+            dist = self.tag_distance(corner)
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
