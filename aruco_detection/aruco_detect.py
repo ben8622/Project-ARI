@@ -9,8 +9,9 @@ class aruco_detect:
         self.ar_params = cv.aruco.DetectorParameters_create()
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
         self.gate_no = np.array([10, 20, 30])
+        self.gates = {}
         for g in self.gate_no:
-            self.gates = {g, False}
+            self.gates.update({g: False})
         
 
     def draw_tags(self, frame):
@@ -39,6 +40,7 @@ class aruco_detect:
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
             return(ar_frame)
 
+
     def tag_distance(self, corner):
         corners_abcd = corner.reshape((4, 2))
         (topLeft, topRight, bottomRight, bottomLeft) = corners_abcd
@@ -53,10 +55,43 @@ class aruco_detect:
         return 0
 
 
-    def count_at_gate(self, frame):
+    def gate_check(self, frame):
+        # Width of camera frame
+        w = frame.shape[1]
         
+        # Detects AR tags
+        ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
+        ar_ids = ar_ids.flatten()
 
-
+        # Check if gate tag is in view
+        gate_found = False
+        if np.all(ar_ids == None):
+            gate_found = False
+        else:
+            for ar in ar_ids:
+                if ar in self.gate_no:
+                    print(ar)
+                    i = np.where(ar_ids == ar)
+                    i = i[0][0]
+                    print('i: ', i)
+                    self.gates[ar] = True
+                    gate_found = True
+            
+        # Check if gate is in the center of view/screen
+        gate_centered = False
+        if gate_found:
+            # Find center of of tag and its location on screen
+            tlc = ar_corn[i][0][0]     # top left corner
+            trc = ar_corn[i][0][1]     # top right corner
+            
+            # Location of the tag's center on screen
+            tag_center_loc = 0.5*(trc[1] - tlc[1]) + tlc[1]
+            
+            if 0.5*w - 50 <= tag_center_loc <= 0.5*w + 50 :
+                return(True)
+            else:
+                return(False)
+                
 
     def count_tags(self, ar_ids, ar_corners):
         # Tally total occurences of each tag

@@ -7,8 +7,13 @@ ar = aruco_detect.aruco_detect()
 
 frame1 = cv.imread("no_ar_present.png")
 frame2 = cv.imread("boxesWithArucoTags.png")
-ar_frame = ar.draw_tags_count(frame2)
+frame3 = cv.imread("aruco_gate.png")
 
+if ar.gate_check(frame3):
+    ar_frame = ar.draw_tags_count(frame2)
+else:
+    ar_frame = frame3
+    
 while(True):
     cv.imshow('ar test', ar_frame)
     
@@ -17,5 +22,4 @@ while(True):
 
 print("DATA:")
 print(ar.ar_counts)
-print("Total Boxes: ", ar.total)
 cv.destroyAllWindows()
