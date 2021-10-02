@@ -9,13 +9,18 @@ frame1 = cv.imread("no_ar_present.png")
 frame2 = cv.imread("boxesWithArucoTags.png")
 frame3 = cv.imread("aruco_gate.png")
 
-g_check = ar.gate_check(frame3)
-print(g_check)
 
-if g_check:
+preview = True
+
+if preview:
     ar_frame = ar.draw_tags_count(frame2)
 else:
-    ar_frame = frame3
+    g_check = ar.gate_check(frame2)
+    if g_check:
+        ar.count_tags(frame2)
+        ar_frame = ar.draw_tags(frame2)
+    else:
+        ar_frame = frame2
     
 while(True):
     cv.imshow('ar test', ar_frame)
