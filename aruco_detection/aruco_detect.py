@@ -18,9 +18,7 @@ class aruco_detect:
         # Counts the number of each ar tag
         unique, counts = np.unique(ar_ids, return_counts=True)
         self.ar_counts = dict(zip(unique, counts))
-        # ar_set = set(ar_ids.flatten())
-        # self.ar_counts = dict((x, ar_ids.count(x)) for x in ar_set)
-        # 
+
         # Total number of tags/objects
         self.total = len(ar_ids)
         
