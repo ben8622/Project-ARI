@@ -9,7 +9,10 @@ frame1 = cv.imread("no_ar_present.png")
 frame2 = cv.imread("boxesWithArucoTags.png")
 frame3 = cv.imread("aruco_gate.png")
 
-if ar.gate_check(frame3):
+g_check = ar.gate_check(frame3)
+print(g_check)
+
+if g_check:
     ar_frame = ar.draw_tags_count(frame2)
 else:
     ar_frame = frame3
