@@ -1,0 +1,38 @@
+<body>
+  <div class="container">
+      <div class="row">
+          <div class="col-lg-8  offset-lg-2">
+              <h3 class="mt-5">Live Streaming</h3>
+              <h2>Value {{ value }}</h2>
+              <img src="{{ url_for('video_feed') }}">
+          </div>
+          <button id="AddToValue">Add to value</button>
+          <h3 id="val">0</h3>
+      </div>
+  </div>
+</body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type=text/javascript>
+    $(function() {
+        $('#AddToValue').on('click', function(e) {
+            e.preventDefault()
+            var val = $('#val').text()
+            $.ajax({
+                type : 'GET',
+                url : "{{url_for('test')}}?data="+val,
+                success: function(response) {
+                    $('#val').text(response)
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+<style>
+    image{
+        height: 640;
+        width: 680;
+    }
+</style>
