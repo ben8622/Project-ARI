@@ -60,7 +60,7 @@ class aruco_detect:
         ed = (((left_x - right_x)**2 + (left_y - right_y)**2) ** 0.5) ## pixels
         ar_tag_width = 150 ## mm
         focal_length = 107.95 ## mm
-        sensor_height = 70 # mm
+        sensor_height = 80 # mm
 
         num = focal_length * ar_tag_width * self.size_of_frame
         denom = ed * sensor_height
