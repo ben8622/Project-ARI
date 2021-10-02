@@ -9,6 +9,7 @@ class aruco_detect:
         self.ar_params = cv.aruco.DetectorParameters_create()
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
         self.gate_no = np.array([10, 20, 30])
+        self.size_of_frame = None
         self.gates = {}
         for g in self.gate_no:
             self.gates.update({g: False})
@@ -17,7 +18,7 @@ class aruco_detect:
     def draw_tags(self, frame):
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
-
+        
         if np.all(ar_ids == None):
             return(frame)
         else:
@@ -30,7 +31,7 @@ class aruco_detect:
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
-        
+        self.size_of_frame = frame.shape[0]
         if np.all(ar_ids == None):
             return(frame)
         else:
@@ -51,6 +52,22 @@ class aruco_detect:
 
         cX = int((topLeft[0] + bottomRight[0])//2)
         cY = int((topLeft[1] + bottomRight[1])//2)
+
+        left_x, left_y = int(topLeft[0]), int(topLeft[1])
+        right_x, right_y = int(topRight[0]), int(topRight[1])
+        
+        ## distance between top corners of detected ar tag IN THE IMG
+        ed = (((left_x - right_x)**2 + (left_y - right_y)**2) ** 0.5) ## pixels
+        ar_tag_width = 150 ## mm
+        focal_length = 107.95 ## mm
+        sensor_height = 80 # mm
+
+        num = focal_length * ar_tag_width * self.size_of_frame
+        denom = ed * sensor_height
+
+        dist = ( num  / denom ) / 1000 # mm -> m
+
+        print("distance = ", dist)
 
         return 0
 
