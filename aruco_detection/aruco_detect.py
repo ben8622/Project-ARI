@@ -16,6 +16,7 @@ class aruco_detect:
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
         self.total = 0
+        print(ar_corn)
         if np.all(ar_ids != None):
             # Counts the number of each ar tag
             unique, counts = np.unique(ar_ids, return_counts=True)
