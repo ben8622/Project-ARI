@@ -62,7 +62,8 @@
                     <img id="zamboni-feed" hidden src="/static/zamboni.jpg">
                 </div>
                 <div class="row" style="padding-top: 10px;">
-                    <button type="button" class="btn btn-info" style="width: 525;">Change Cameras</button>
+                    <button id="change-cameras" type="button" class="btn btn-info" style="width: 525;">Change Cameras</button>
+                    <button id="test" type="button" class="btn btn-warning" style="width: 525;">TEST</button>
                 </div>
             </div>
         </div>
@@ -83,6 +84,26 @@
                 }
             });
             return false;
+        });
+
+        $('#test').on('click', function(e) {
+            e.preventDefault()
+            $.ajax({
+                type : 'GET',
+                url : "{{url_for('test')}}",
+                success: function(response) {
+                    console.log(response)
+                }
+            });
+            return false;
+        });
+
+        $('#change-cameras').on('click', function(e) {
+            e.preventDefault()
+            var camFeed = !$("#cam-feed").prop("hidden")
+            $("#cam-feed").prop("hidden", camFeed)
+            var zamboniFeed = !$("#zamboni-feed").prop("hidden")
+            $("#zamboni-feed").prop("hidden", zamboniFeed)
         });
     });
 </script>
