@@ -1,9 +1,10 @@
 #Import necessary libraries
 from flask import Flask, render_template, Response, request
 import cv2
+from aruco_detection import aruco_detect
 #Initialize the Flask app
 app = Flask(__name__)
-
+ar = aruco_detect.aruco_detect()
 camera = cv2.VideoCapture(0)
 
 def gen_frames():  
@@ -12,6 +13,7 @@ def gen_frames():
         if not success:
             break
         else:
+            frame = ar.get_tags(frame)
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
@@ -32,10 +34,8 @@ def background_process_test():
 
 @app.route('/test', methods=['GET','POST'])
 def test():
-    print(request.args['data'])
-    val = int(request.args['data'])
-    val = val + 1
-    return str(val)
+    print(ar.ar_counts)
+    return ar.ar_counts
 
 if __name__ == "__main__":
     app.run(debug=True)

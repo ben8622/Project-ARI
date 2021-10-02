@@ -17,6 +17,7 @@ class aruco_detect:
     def draw_tags(self, frame):
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
+<<<<<<< HEAD
         
         if np.all(ar_ids == None):
             return(frame)
@@ -34,9 +35,20 @@ class aruco_detect:
             return(frame)
         else:
             self.count_tags(ar_ids)
+=======
+        self.ar_counts = {'0': 0, '1': 0, '2': 0}
+        self.total = 0
+        if np.all(ar_ids != None):
+
+            # Tally total occurences of each tag
+            for ar_id in ar_ids:
+              self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
+
+>>>>>>> 1ab6ec4124240ff68b798df848a695d95c327063
             # Draw Outline around AR tags
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
             return(ar_frame)
+<<<<<<< HEAD
 
 
     def count_tags(self, ar_ids):
@@ -46,3 +58,9 @@ class aruco_detect:
 
         # Total number of tags/objects
         self.total = len(ar_ids)
+=======
+        else:
+            return(frame)
+
+    # def tag_distance(self, frame):            
+>>>>>>> 1ab6ec4124240ff68b798df848a695d95c327063
