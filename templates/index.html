@@ -63,7 +63,6 @@
                 </div>
                 <div class="row" style="padding-top: 10px;">
                     <button id="change-cameras" type="button" class="btn btn-info" style="width: 525;">Change Cameras</button>
-                    <button id="test" type="button" class="btn btn-warning" style="width: 525;">TEST</button>
                 </div>
             </div>
         </div>
@@ -106,18 +105,13 @@
                 success: function(response) {
                     let maskCount = response['0']
                     let ventilatorCount = response['1']
-                    if(typeof maskCount == "undefined"){
-                        maskCount = 0
-                    }
-                    if(typeof ventilatorCount == "undefined"){
-                        ventilatorCount = 0
-                    }
+                    let zamboniCount = $('#zamboniCount').text()
 
                     $('#maskCount').text(maskCount)
                     $('#ventilatorCount').text(ventilatorCount)
 
-                    let estWeight = 10.5 * maskCount + 43.67 * ventilatorCount
-                    let estVol = 5 * maskCount + 20 * ventilatorCount
+                    let estWeight = 10.5 * maskCount + 43.67 * ventilatorCount + 9750.4 * zamboniCount
+                    let estVol = 5 * maskCount + 20 * ventilatorCount + 63 * zamboniCount
 
                     $("#estWeight").text(estWeight + " lbs");
                     $("#estVol").text(estVol + " sqft");
