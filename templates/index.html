@@ -63,6 +63,7 @@
                 </div>
                 <div class="row" style="padding-top: 10px;">
                     <button id="change-cameras" type="button" class="btn btn-info" style="width: 525;">Change Cameras</button>
+                    <button id="change-preview" type="button" class="btn btn-info" style="margin-top: 10px; width: 525;">Switch Scanning Mode</button>
                 </div>
             </div>
         </div>
@@ -96,6 +97,17 @@
             } else {
                 $('#zamboniCount').text("0")
             }
+        });
+
+        $('#change-preview').on('click', function(e) {
+            e.preventDefault();
+            $.ajax({
+                type : 'GET',
+                url : "{{url_for('change_preview')}}",
+                success: function(response) {
+                    // TODO add some sort of notifier we are in scanning mode
+                }
+            });
         });
 
         setInterval(() => {

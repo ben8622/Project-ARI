@@ -37,5 +37,10 @@ def test():
     print(ar.ar_counts)
     return ar.ar_counts
 
+@app.route('/change_preview', methods=['GET','POST'])
+def change_preview():
+    return "test"
+    ## TODO: Add actual flag switch
+
 if __name__ == "__main__":
     app.run(debug=True)
