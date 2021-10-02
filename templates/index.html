@@ -1,15 +1,72 @@
 <body>
-  <div class="container">
-      <div class="row">
-          <div class="col-lg-8  offset-lg-2">
-              <h3 class="mt-5">Live Streaming</h3>
-              <h2>Value {{ value }}</h2>
-              <img src="{{ url_for('video_feed') }}">
-          </div>
-          <button id="AddToValue">Add to value</button>
-          <h3 id="val">0</h3>
-      </div>
-  </div>
+    <div class="container">
+        <div class="row">
+            <h2 class="mt-5">INVENTORY</h2>
+            <hr  class="rounded" style="border-top: 7px solid; border-radius: 5px;">
+            <div class="col-md-4">
+                <div id="item-counts">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <strong>ITEM</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="count"><strong >COUNT</strong></p>
+                        </div>
+                    </div>  
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>Mask:</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="count">0</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-8">
+                        <p>Ventilator:</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="count">0</p>
+                    </div>
+                    </div>
+                    <div class="row">
+                    <div class="col-md-8">
+                        <p>Zamboni:</p>
+                    </div>
+                    <div class="col-md-4">
+                        <p class="count">0</p>
+                    </div>
+                    </div>
+                </div>
+                <hr class="dashed">
+                <div id="item-stats"> 
+                    <div class="row">
+                        <div class="col-md-8">
+                            <p>Est. Weight:</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="count">0</p>
+                        </div>
+                        <div class="col-md-8">
+                            <p>Est. Volume:</p>
+                        </div>
+                        <div class="col-md-4">
+                            <p class="count">0</p>
+                        </div>
+                    </div>  
+                </div>
+            </div>
+            <div class="col-md-8" id="img-div">
+                <div class="row">
+                    <img id="cam-feed" src="{{ url_for('video_feed') }}">
+                    <img id="zamboni-feed" hidden src="/static/zamboni.jpg">
+                </div>
+                <div class="row" style="padding-top: 10px;">
+                    <button type="button" class="btn btn-info" style="width: 525;">Change Cameras</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
@@ -30,9 +87,23 @@
     });
 </script>
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 <style>
-    image{
-        height: 640;
-        width: 680;
+    body{
+        background-color: #404040;
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    img{
+        height: 400;
+        width: 525;
+    }
+    #img-div{
+        margin-top:auto;
+        margin-bottom:auto;
+        text-align:end;
+    }
+    .count{
+        text-align: right;
     }
 </style>
