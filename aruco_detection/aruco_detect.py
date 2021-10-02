@@ -11,12 +11,21 @@ class aruco_detect:
         self.total = 0
 
 
-    def get_tags(self, frame) -> dict:
-        ar_corners, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
+    def get_tags(self, frame):
+        # Detects AR tags
+        ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         
         # Counts the number of each ar tag
-        ar_set = set(ar_ids)
-        self.ar_counts = dict((x, ar_ids.count(x) for x in ar_set))
-        
+        unique, counts = np.unique(ar_ids, return_counts=True)
+        self.ar_counts = dict(zip(unique, counts))
+        # ar_set = set(ar_ids.flatten())
+        # self.ar_counts = dict((x, ar_ids.count(x)) for x in ar_set)
+        # 
+        # Total number of tags/objects
         self.total = len(ar_ids)
-
+        
+        # Draw Outline around AR tags
+        ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
+        
+        return(ar_frame)
+            
