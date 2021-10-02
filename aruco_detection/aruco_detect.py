@@ -18,17 +18,16 @@ class aruco_detect:
         self.total = 0
         print(ar_corn)
         if np.all(ar_ids != None):
-            # Counts the number of each ar tag
-            unique, counts = np.unique(ar_ids, return_counts=True)
-            self.ar_counts = dict(zip(unique.astype(str), counts.astype(str)))
 
-            # Total number of tags/objects
-            self.total = len(ar_ids)
-            
+            # Tally total occurences of each tag
+            for ar_id in ar_ids:
+              self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
+
             # Draw Outline around AR tags
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
             
             return(ar_frame)
         else:
             return(frame)
-            
+
+    # def tag_distance(self, frame):            
