@@ -14,7 +14,6 @@ class aruco_detect:
     def get_tags(self, frame):
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
-        print(ar_corn)
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
         self.total = 0
         if np.all(ar_ids != None):
