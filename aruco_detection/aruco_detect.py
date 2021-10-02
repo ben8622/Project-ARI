@@ -16,12 +16,13 @@ class aruco_detect:
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         self.ar_counts = {'0': 0, '1': 0, '2': 0}
         self.total = 0
-        print(ar_corn)
         if np.all(ar_ids != None):
 
             # Tally total occurences of each tag
-            for ar_id in ar_ids:
-              self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
+            for (ar_id, corner) in zip(ar_ids, ar_corn):
+                print(corner)
+                self.tag_distance(corner)  
+                self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
             # Draw Outline around AR tags
             ar_frame = cv.aruco.drawDetectedMarkers(frame, ar_corn, ar_ids)
@@ -30,4 +31,31 @@ class aruco_detect:
         else:
             return(frame)
 
-    # def tag_distance(self, frame):            
+    def tag_distance(self, corner): 
+        Dist = []
+
+        corners_abcd = corner.reshape((4, 2))
+        (topLeft, topRight, bottomRight, bottomLeft) = corners_abcd
+        topRightPoint = (int(topRight[0]), int(topRight[1]))
+        topLeftPoint = (int(topLeft[0]), int(topLeft[1]))
+        bottomRightPoint = (int(bottomRight[0]), int(bottomRight[1]))
+        bottomLeftPoint = (int(bottomLeft[0]), int(bottomLeft[1]))
+
+        cX = int((topLeft[0] + bottomRight[0])//2)
+        cY = int((topLeft[1] + bottomRight[1])//2)
+
+        measure = abs(3.5/(topLeft[0]-cX))
+        #cv2.circle(image, (cX, cY), 4, (255, 0, 0), -1)
+        #cv2.putText(image, str(int(markerId)), (int(topLeft[0]-10), int(topLeft[1]-10)), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+        Dist.append((cX, cY))
+        # print(arucoDict)
+        if len(Dist) == 0:
+            if Line_Pts is not None:
+                Dist = Line_Pts
+        if len(Dist) == 2:
+            Line_Pts = Dist
+        if len(Dist) == 2:
+            #cv2.line(image, Dist[0], Dist[1], (255, 0, 255), 2)
+            ed = ((Dist[0][0] - Dist[1][0])**2 +((Dist[0][1] - Dist[1][1])**2))**(0.5)
+            #cv2.putText(image, str(int(measure*(ed))) + "cm", (int(300), int(300)), cv2.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
+            print("Euclidian distance = ", ed)
