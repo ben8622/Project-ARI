@@ -7,9 +7,10 @@ class aruco_detect:
         # Set up CV2 Aruco 
         self.ar_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_4X4_100)
         self.ar_params = cv.aruco.DetectorParameters_create()
-        self.ar_counts = {'0': 0, '1': 0, '2': 0}
+        self.ar_counts = {'0': 0, '1': 0, '2': 0, '10': 0, '20': 0, '30': 0}
         self.gate_no = np.array([10, 20, 30])
         self.size_of_frame = None
+        self.scanning = False
         self.gates = {}
         for g in self.gate_no:
             self.gates.update({g: False})
@@ -30,7 +31,7 @@ class aruco_detect:
     def draw_tags_count(self, frame):
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
-        self.ar_counts = {'0': 0, '1': 0, '2': 0}
+        self.ar_counts = {'0': 0, '1': 0, '2': 0, '10': 0, '20': 0, '30': 0}
         self.size_of_frame = frame.shape[0]
         if np.all(ar_ids == None):
             return(frame)
@@ -78,22 +79,21 @@ class aruco_detect:
         
         # Detects AR tags
         ar_corn, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
-        ar_ids = ar_ids.flatten()
 
         # Check if gate tag is in view
         gate_found = False
         if np.all(ar_ids == None):
-            gate_found = False
             return(False)
         else:
+            ar_ids = ar_ids.flatten()
             for ar in ar_ids:
-                if ar in self.gate_no:
-                    print(ar)
+                if ar in self.gate_no and not self.gates[ar]:
                     i = np.where(ar_ids == ar)
                     i = i[0][0]
-                    print('i: ', i)
                     self.gates[ar] = True
                     gate_found = True
+                else:
+                    return(False)
             
         # Check if gate is in the center of view/screen
         gate_centered = False
@@ -103,7 +103,7 @@ class aruco_detect:
             trc = ar_corn[i][0][1]     # top right corner
             print('width of frame: ',w)
             print('tlc ',tlc, 'trc: ',trc)
-            # Location of the tag's center on screen
+            # Location of the tag's center position on the screen
             tag_center_loc = 0.5*(trc[0] - tlc[0]) + tlc[0]
             print('center location: ', tag_center_loc)
             if 0.5*w - 50 <= tag_center_loc <= 0.5*w + 50 :
@@ -115,8 +115,10 @@ class aruco_detect:
                 
 
     def count_tags(self, ar_ids, ar_corners):
+
         # Tally total occurences of each tag
         for (ar_id, corner) in zip(ar_ids, ar_corners):
             dist = self.tag_distance(corner)
+            print(self.ar_counts)
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 

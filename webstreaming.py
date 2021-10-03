@@ -6,6 +6,7 @@ from aruco_detection import aruco_detect
 app = Flask(__name__)
 ar = aruco_detect.aruco_detect()
 camera = cv2.VideoCapture(0)
+ar.scanning = False
 
 def gen_frames():  
     while True:
@@ -13,7 +14,15 @@ def gen_frames():
         if not success:
             break
         else:
-            frame = ar.draw_tags_count(frame)
+            if(ar.scanning):
+                ## do oscars type of ar.scanning
+                g_check = ar.gate_check(frame)
+                if g_check:
+                    ar.count_tags(frame)
+                    frame = ar.draw_tags(frame)
+            else:
+                frame = ar.draw_tags_count(frame)
+
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
@@ -34,11 +43,12 @@ def background_process_test():
 
 @app.route('/test', methods=['GET','POST'])
 def test():
-    print(ar.ar_counts)
     return ar.ar_counts
 
 @app.route('/change_preview', methods=['GET','POST'])
 def change_preview():
+    ar.scanning = not ar.scanning
+    ar.ar_count = {'0': 0, '1': 0, '2': 0, '10': 0, '20':0,'30': 0}
     return "test"
     ## TODO: Add actual flag switch
 

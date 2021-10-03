@@ -72,6 +72,7 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
 <script type=text/javascript>
+    let scanning = false;
     $(function() {
         $('#AddToValue').on('click', function(e) {
             e.preventDefault()
@@ -105,6 +106,15 @@
                 type : 'GET',
                 url : "{{url_for('change_preview')}}",
                 success: function(response) {
+                    scanning = !scanning;
+                    if(scanning){
+                        $('#change-preview').text("STOP Scanning")
+                        // change button text to stop scanning
+                    } else {
+                        // change button text to start scanning
+                        $('#change-preview').text("Start Scanning")
+                    }
+
                     // TODO add some sort of notifier we are in scanning mode
                 }
             });
