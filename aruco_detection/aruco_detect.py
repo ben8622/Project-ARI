@@ -8,12 +8,13 @@ class aruco_detect:
         self.ar_dict = cv.aruco.Dictionary_get(cv.aruco.DICT_4X4_100)
         self.ar_params = cv.aruco.DetectorParameters_create()
         self.ar_counts = {'0': 0, '1': 0, '2': 0, '10': 0, '20': 0, '30': 0}
-        self.gate_no = np.array([10, 20, 30])
+        self.gate_no = [10, 20, 30]
         self.size_of_frame = None
         self.scanning = False
         self.gates = {}
         for g in self.gate_no:
             self.gates.update({g: False})
+        print(self.gates)
         
 
     def draw_tags(self, frame):
@@ -67,8 +68,6 @@ class aruco_detect:
 
         dist = ( num  / denom ) / 1000 # mm -> m
 
-        print("distance = ", dist)
-
         return dist, topLeft
 
 
@@ -82,18 +81,23 @@ class aruco_detect:
         # Check if gate tag is in view
         gate_found = False
         if np.all(ar_ids == None):
+            print("hit 1")
             return(False)
         else:
             ar_ids = ar_ids.flatten()
             for ar in ar_ids:
-                if ar in self.gate_no and not self.gates[ar]:
+                if ar in self.gate_no and not self.gates[int(ar)]:
+                #if ar in self.gate_no:
                     i = np.where(ar_ids == ar)
                     i = i[0][0]
                     self.gates[ar] = True
                     gate_found = True
                 else:
+                    print("hit 2", ar)
+                    print("type = ", type(ar))
                     return(False)
-            
+        
+        print("hit 3")
         # Check if gate is in the center of view/screen
         gate_centered = False
         if gate_found:
@@ -118,8 +122,7 @@ class aruco_detect:
         # Tally total occurences of each tag
         for (ar_id, corner) in zip(ar_ids, ar_corners):
             dist, topLeft = self.tag_distance(corner)
-            frame = cv.putText(frame, str(dist), (int(topLeft[0]-10),   int(topLeft[1]-10)), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
-            print(self.ar_counts)
+            frame = cv.putText(frame, "{:.2f}m".format(dist), (int(topLeft[0]-10),   int(topLeft[1]-10)), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
         return frame

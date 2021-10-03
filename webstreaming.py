@@ -18,11 +18,13 @@ def gen_frames():
                 ## do oscars type of ar.scanning
                 g_check = ar.gate_check(frame)
                 if g_check:
+                    print("FOUND GATE")
                     ar.count_tags(frame)
-                    frame = ar.draw_tags(frame)
+                    print("AR TAG COUNT =", ar.ar_counts)
             else:
                 frame = ar.draw_tags_count(frame)
 
+            frame = ar.draw_tags(frame)
             ret, buffer = cv2.imencode('.jpg', frame)
             frame = buffer.tobytes()
             yield (b'--frame\r\n'
