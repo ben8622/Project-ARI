@@ -121,4 +121,4 @@ class aruco_detect:
             print(self.ar_counts)
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
-
+    
