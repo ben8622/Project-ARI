@@ -2,7 +2,6 @@
 from flask import Flask, render_template, Response, request
 import cv2
 from aruco_detection import aruco_detect
-import numpy as np
 #Initialize the Flask app
 app = Flask(__name__)
 ar = aruco_detect.aruco_detect()
@@ -12,8 +11,6 @@ ar.scanning = False
 def gen_frames():  
     while True:
         success, frame = camera.read()  # read the camera frame
-        kernel = np.array([[-1,-1,-1], [-1,9,-1], [-1,-1,-1]])
-        frame = cv.filter2D(frame, -1, kernel)
         if not success:
             break
         else:
