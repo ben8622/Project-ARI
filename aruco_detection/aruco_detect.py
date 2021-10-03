@@ -11,6 +11,7 @@ class aruco_detect:
         self.gate_no = [10, 20, 30]
         self.size_of_frame = None
         self.scanning = False
+        self.totals = {'0': 0, '1': 0, '2': 0, '10': 0, '20': 0, '30': 0}
         self.gates = {}
         for g in self.gate_no:
             self.gates.update({g: False})
@@ -128,3 +129,10 @@ class aruco_detect:
         return frame
 
 
+    def reset_totals(self):
+        self.totals = {'0': 0, '1': 0, '2': 0, '10': 0, '20': 0, '30': 0}
+
+
+    def add2total(self):
+        for x in self.ar_counts.keys():
+            self.totals[x] += self.ar_counts[x]
