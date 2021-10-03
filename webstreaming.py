@@ -22,7 +22,8 @@ def gen_frames():
                 g_check = ar.gate_check(frame)
                 if g_check:
                     print("FOUND GATE")
-                    ar.count_tags(frame)
+                    frame = ar.count_tags(frame)
+                    ar.add2total()
                     print("AR TAG COUNT =", ar.ar_counts)
             else:
                 frame = ar.draw_tags_count(frame)
@@ -48,7 +49,10 @@ def background_process_test():
 
 @app.route('/test', methods=['GET','POST'])
 def test():
-    return ar.ar_counts
+    if ar.scanning:
+        return ar.totals
+    else:
+        return ar.ar_counts
 
 @app.route('/change_preview', methods=['GET','POST'])
 def change_preview():

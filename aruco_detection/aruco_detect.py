@@ -87,6 +87,7 @@ class aruco_detect:
         else:
             ar_ids = ar_ids.flatten()
             for ar in ar_ids:
+                print('ar: ', ar)
                 if ar in self.gate_no and not self.gates[int(ar)]:
                 #if ar in self.gate_no:
                     i = np.where(ar_ids == ar)
@@ -122,11 +123,12 @@ class aruco_detect:
         ar_corners, ar_ids, rejects = cv.aruco.detectMarkers(frame, self.ar_dict, parameters=self.ar_params)
         # Tally total occurences of each tag
         for (ar_id, corner) in zip(ar_ids, ar_corners):
+            self.size_of_frame = frame.shape[0]
             dist, topLeft = self.tag_distance(corner)
             frame = cv.putText(frame, "{:.2f}m".format(dist), (int(topLeft[0]-10),   int(topLeft[1]-10)), cv.FONT_HERSHEY_COMPLEX, 1, (0, 0, 255))
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
-        return frame
+        return(frame)
 
 
     def reset_totals(self):
@@ -135,4 +137,5 @@ class aruco_detect:
 
     def add2total(self):
         for x in self.ar_counts.keys():
-            self.totals[x] += self.ar_counts[x]
+            self.totals[x] = str(self.totals[x] + int(self.ar_counts[x]))
+            
