@@ -48,7 +48,7 @@ def test():
 @app.route('/change_preview', methods=['GET','POST'])
 def change_preview():
     ar.scanning = not ar.scanning
-    ar.ar_count = {'0': 0, '1': 0, '2': 0, '10': 0, '20':0,'30': 0}
+    ar.ar_counts = {'0': 0, '1': 0, '2': 0, '10': 0, '20':0,'30': 0}
     return "test"
     ## TODO: Add actual flag switch
 

@@ -122,5 +122,10 @@ class aruco_detect:
             print(self.ar_counts)
             self.ar_counts[str(ar_id[0])] = str(int(self.ar_counts[str(ar_id[0])]) + 1) 
 
+<<<<<<< HEAD
+    
+=======
         return frame
 
+
+>>>>>>> 4c6e7abed51a3284466696bfe5eea1031d9ac6dd
